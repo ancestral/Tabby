@@ -9,25 +9,27 @@ Tabby files should end with the extension `.tabby` or `.tby`, but `.tsv` is also
 
 There are three types of data in a Tabby file: objects, key-value pairs and values.
 
-* **Object** may contain any number of other objects or key-value pairs.
-* **Key-Value Pair* contains a key and values.
-* **Value** may be objects or any number of integers or words.
+* **Object** may contain any number of other objects or key-value pairs. Any lines follow starting with an additional tab character. The object continues until a line begins with fewer beginning tab characters than the line of the object’s key.
+* **Key-Value Pair** contains a key, followed by a tab character, then a value which can contain any non-newline characters. If the following line contains just a value at the same indentation, it is considered a list of values.
+* **Value** may be objects or any number of integers or words, which can consist of any characters except newline characters, tabs and backslash. (Though not defined, `\t` and `\n` are typically representative of tabs and newlines, and `\\` for a single backslash.)
+
+Additionally, a **Key** is any word which may contain any characters except quote, double quote, control characters, whitespace characters and backslashes, except if escaped with a backslash. However, Tabby files should not contain any of these exceptions if possible.
 
 ## Example
     menu
-      id  file
-      value File
-      popup
-        menuitem
-          1
-            value New
-            onclick CreateNewDoc()
-          2
-            value Open
-            onclick OpenDoc()
-          3
-            value Close
-            onclick CloseDoc()
+        id  file
+        value File
+        popup
+            menuitem
+                0
+                    value New
+                    onclick CreateNewDoc()
+                1
+                    value Open
+                    onclick OpenDoc()
+                2
+                    value Close
+                    onclick CloseDoc()
 
 In JSON, this example would look like this:
 
