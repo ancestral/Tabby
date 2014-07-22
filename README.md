@@ -2,20 +2,24 @@
 Clean, tab-separated data format
 
 ## Introduction
-Tabby is a file format for writing configuration and other text data in an easy and clean manner. It is similar to the tab-separated value (TSV) format, but more defined, with a logical flow that allows for arrayed and object data.
+Tabby is a file format for writing configuration and other text data in an easy and clean manner. It is similar to the tab-separated value (TSV) format, but more defined, with a logical flow that allows for arrayed and object data. It requires typing fewer additional characters and works well when editing in spreadsheets or tables.
 
 ## Rules
 Tabby files should end with the extension `.tabby` or `.tby`, but `.tsv` is also acceptable. Files may be encoded with any character set, as long as it contains tab and newline characters (carriage returns and/or line feeds).
 
-There are three types of data in a Tabby file: objects, key-value pairs and values.
+There are three types of data in a Tabby file: objects, key-value pairs and values..
 
-* **Object** may contain any number of other objects or key-value pairs. Any lines follow starting with an additional tab character. The object continues until a line begins with fewer beginning tab characters than the line of the object’s key.
-* **Key-Value Pair** contains a key, followed by a tab character, then a value which can contain any non-newline characters. If the following line contains just a value at the same indentation, it is considered a list of values.
-* **Value** may be objects or any number of integers or words, which can consist of any characters except newline characters, tabs and backslash. (Though not defined, `\t` and `\n` are typically representative of tabs and newlines, and `\\` for a single backslash.)
+* **Object** may contain any number of other objects or key-value pairs. All objects must have a key. Any lines follow starting with an additional tab character. The object continues until a line begins with fewer beginning tab characters than the line of the object’s key.
+* **Key-Value Pair** contains a key, followed by a tab character, then a value or set of values. If the line separates values with tabs, or the following lines contain just a value at the same indentation, it is then considered a list of values.
+* **Value** may be objects or any number of integers or words, and any characters except newline characters, tabs, and a single backslash. (Though not defined, `\t` and `\n` are typically representative of tabs and newlines, and `\\` for a single backslash.) Other whitespace is counted.
 
 Additionally, a **Key** is any word which may contain any characters except quote, double quote, control characters, whitespace characters and backslashes, except if escaped with a backslash. However, Tabby files should not contain any of these exceptions if possible.
 
+The root type of the file is an anonymous object. Aside from that, anonymous objects are not allowed. If authors cannot find a suitable key name then they may use integers starting at 0.
+
 ## Example
+As text:
+
     menu
         id  file
         value File
@@ -31,6 +35,23 @@ Additionally, a **Key** is any word which may contain any characters except quot
                     value Close
                     onclick CloseDoc()
 
+In a table:
+
+| menu |       |          |   |         |                |
+|------|-------|----------|---|---------|----------------|
+|      | id    | file     |   |         |                |
+|      | value | File     |   |         |                |
+|      | popup |          |   |         |                |
+|      |       | menuitem |   |         |                |
+|      |       |          | 0 |         |                |
+|      |       |          |   | value   | New            |
+|      |       |          |   | onclick | CreateNewDoc() |
+|      |       |          | 1 |         |                |
+|      |       |          |   | value   | Open           |
+|      |       |          |   | onclick | OpenDoc()      |
+|      |       |          | 2 |         |                |
+|      |       |          |   | value   | Close          |
+|      |       |          |   | onclick | CloseDoc()     |
 In JSON, this example would look like this:
 
     {"menu": {
@@ -44,3 +65,10 @@ In JSON, this example would look like this:
         ]
       }
     }}
+
+## Differences compared to JSON
+In some ways, Tabby is very similar to JSON. It isn’t too difficult to translate between the two formats.
+
+* Tabby uses no punctuation aside from tab and newline characters when defining values.
+* Spaces are not ignored when typed in a value.
+* All values should be considered a part of an array, and if only one value exists, should be treated as if no array exists.
