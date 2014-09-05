@@ -24,7 +24,7 @@ Some coders like using soft tabs, and Tabby supports those too. The first time t
 * Technically tabs and soft tabs can co-exist in a file, but it should be discouraged in practice.
 * If there are extra “remainder” spaces, if they surround a value, these are part of the value.)
 
-## Validation
+### Validation
 No tab separated files can be invalid. Even a malformed file will not throw an error, though it may not offer much worth to the developer or user.
 
 ## Example
